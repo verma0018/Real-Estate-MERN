@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link , useNavigate} from 'react-router-dom';
 export default function SignOut() {
-  const [formData, setFormData] = useStatetate({});
+  const [formData, setFormData] = useState({});
   const [error,setError] = useState(null);
   const [loading, setLoading]  = useState(false);
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ export default function SignOut() {
     e.preventDefault();
     setLoading(true);
     try{
-      const res = await('/api/auth/signup', {
+      const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ export default function SignOut() {
       });
   
       const data =  await res.json();
-      console.log(data);
+      console.log("Data is: ",data);
       if(data.success === false){
         setError(data.message);
         setLoading(false);
@@ -36,6 +36,7 @@ export default function SignOut() {
       setError(null);
       navigate('/sign-in')
     }catch(error){
+      console.log("Error is: ", error);
       setLoading(false);
       setError(error.message);
     }
@@ -48,7 +49,7 @@ export default function SignOut() {
       <form className='flex flex-col gap-4'  onSubmit={handleSubmit}>
         <input type="text" className='border rounded-lg p-3 ' placeholder='username' id='username' onChange={handleChange}/>
         <input type="text" className='border rounded-lg p-3 ' placeholder='email' id='email' onChange={handleChange}/>
-        <input type="text" className='border rounded-lg p-3 ' placeholder='password' id='passowrd' onChange={handleChange}/>
+        <input type="text" className='border rounded-lg p-3 ' placeholder='password' id='password' onChange={handleChange}/>
         <button disabled={loading} className="bg-slate-700 text-white uppercase p-3 rounded-lg hover:opacity-95 disabled:opacity-80">
           {loading ? 'Loading...' : 'Sign Up'}
         </button>
